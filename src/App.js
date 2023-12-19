@@ -1,63 +1,80 @@
-// App.js
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './components/Home';
-import Dashboard from './components/Dashboard';
-import Registration from './components/auth/Registration';
-import Login from './components/auth/Login';
+// src/App.js
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
+import Home from './components/home';
+import SplashScreen from './components/splashscreen';
+import Signup from './auth/register';
+import Login from './auth/login';
+import Logout from './auth/logout';
+import { checkLoginStatus } from './redux/loginSlice';
 
-export default class App extends Component {
-  constructor() {
-    super();
 
-    this.state = {
-      loggedInStatus: "NOT_LOGGED_IN",
-      user: {}
+
+function App() {
+  const dispatch = useDispatch();
+  const loginStatus = useSelector((state) => state.login_auths.loggedin);
+
+  const [userData, setUserData] = useState({});
+
+  const retrieveUserData = () => {
+    // Retrieve the content from localStorage
+    const userDataJSON = localStorage.getItem('userData');
+
+    // Parse the JSON content
+    const storedUserData = JSON.parse(userDataJSON);
+    console.log(storedUserData.extractedUserData);
+    return storedUserData.extractedUserData || {};
+  };
+
+  useEffect(() => {
+    const fetchLoginStatus = () => {
+      dispatch(checkLoginStatus());
     };
-  }
 
-  handleSuccessfulAuth = (data) => {
-    this.setState({
-      loggedInStatus: "LOGGED_IN",
-      user: data.user
-    });
-  };
+    // Call fetchLoginStatus when the component mounts
+    if (loginStatus === 'empty') {
+      fetchLoginStatus();
+    }
 
-  handleLogout = () => {
-    // Add logic to clear the user session on the server, if applicable
+    if (loginStatus === 'true') {
+      setUserData(retrieveUserData());
+    }
+  }, [dispatch, loginStatus]);
 
-    this.setState({
-      loggedInStatus: "NOT_LOGGED_IN",
-      user: {}
-    });
-  };
-
-  render() {
+  if (loginStatus !== 'empty') {
     return (
-      <div className='app'>
+      <div className="body">
         <Router>
-          <Routes>
-            <Route
-              path="/"
-              element={<Home loggedInStatus={this.state.loggedInStatus} handleLogout={this.handleLogout} />}
-            />
-        
-
-            <Route
-              path="/dashboard"
-              element={<Dashboard loggedInStatus={this.state.loggedInStatus === "LOGGED_IN"} />}
-            />
-            <Route
-              path="/register"
-              element={<Registration handleSuccessfulAuth={this.handleSuccessfulAuth} />}
-            />
-            <Route
-              path="/login"
-              element={<Login handleSuccessfulAuth={this.handleSuccessfulAuth} />}
-            />
-          </Routes>
+          <div className="pageSection">
+            <Routes>
+              <Route
+                path="/"
+                exact
+                element={
+                  loginStatus === 'true' ? (
+                    <Navigate to="/home" />
+                  ) : (
+                    <Navigate to="/splash" />
+                  )
+                }
+              />
+              <Route path="/home" element={<Home login={loginStatus} />} />
+              <Route path="/splash" element={<SplashScreen />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login message={loginStatus} />} />
+              <Route path="/logout" element={Logout} />
+            </Routes>
+          </div>
         </Router>
       </div>
     );
   }
 }
+
+export default App;
