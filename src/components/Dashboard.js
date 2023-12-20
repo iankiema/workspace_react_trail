@@ -5,7 +5,7 @@ import axios from 'axios';
 const Dashboard = ({ handleLogout }) => {
 
   const handleLogoutClick = () => {
-    axios.delete("http://localhost:3001/logout", {withCredentials: true})
+    axios.delete("http://localhost:3000/logout", {withCredentials: true})
     .then(response => {
       if (response.data.logged_out) {
         handleLogout();

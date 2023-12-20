@@ -7,11 +7,15 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import Home from './components/home';
+import Home from './components/Home';
 import SplashScreen from './components/splashscreen';
 import Signup from './auth/register';
 import Login from './auth/login';
 import Logout from './auth/logout';
+import PackageList from './components/PackageList';
+import PackageDetails from './components/PackageDetails';
+import ReservationsList from './components/ReservationList';
+import BookReservation from './components/BookReservation';
 import { checkLoginStatus } from './redux/loginSlice';
 
 
@@ -69,6 +73,10 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login message={loginStatus} />} />
               <Route path="/logout" element={Logout} />
+              <Route path="/packages" element={<PackageList/>} />
+              <Route path="/packages/:slug" element={<PackageDetails />} />
+              <Route path="/reservations" element={<ReservationsList/>} />
+              <Route path="/book-reservation" element={<BookReservation/>} />
             </Routes>
           </div>
         </Router>

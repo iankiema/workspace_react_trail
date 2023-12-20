@@ -12,7 +12,7 @@ export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (userData) => {
     try {
-      const response = await fetch('http://localhost:3001/api/v1/logged_in', {
+      const response = await fetch('http://localhost:3000/api/v1/logged_in', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
