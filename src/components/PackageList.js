@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navbar from './sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './PackageList.css';
 
 function PackageList() {
@@ -32,33 +33,51 @@ function PackageList() {
   }, []);
 
   return (
-    <div className="container-fluid">
-      <div className="row">
+    <div className="container-fluid col-lg-12">
+      <div className="row col-lg-12">
         <div className="col-lg-3">
           <Navbar />
         </div>
 
-        <div className="col-lg-9">
+        <div className="col-lg-9 text-center">
           <h2>Our Packages</h2>
           <p>The best packages in the market</p>
 
-          {packages.map((pack) => (
-            <div key={pack.id}>
-              <div>
-                <Link to={`/packages/${pack.attributes.slug}`}>
-                  <h3 className="package-title">{pack.attributes.name}</h3>
-                </Link>
-              </div>
-              <p>{pack.attributes.description}</p>
+      
 
-              {/* Social Icons */}
-              <div className="social-icons-container">
-                <button className="icon-button"><FontAwesomeIcon icon={faFacebookF} /></button>
-                <button className="icon-button"><FontAwesomeIcon icon={faTwitter} /></button>
-                <button className="icon-button"><FontAwesomeIcon icon={faInstagram} /></button>
-              </div>
+          {packages.map((packaged) => (
+            <div key={packaged.attributes.slug} className="col-md-4 mb-4">
+           
+                <div className="card clickable" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                <Link
+                to={`/packages/${packaged.attributes.slug}`}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+                className="card-link"
+              >
+                  <img
+                    src={packaged.attributes.image_url}
+                    className="card-img-top"
+                    alt={packaged.attributes.name}
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">{packaged.attributes.name}</h5>
+                    <p className="card-text">{packaged.attributes.description}</p>
+                    <p className="card-text">${packaged.attributes.price}</p>
+                  </div>
+                  </Link>
+
+                  <div className="social-icons-container mx-auto">
+                    <button className="icon-button"><FontAwesomeIcon icon={faFacebookF} /></button>
+                    <button className="icon-button"><FontAwesomeIcon icon={faTwitter} /></button>
+                    <button className="icon-button"><FontAwesomeIcon icon={faInstagram} /></button>
+                  </div>
+                </div>
+             
+
+              
             </div>
           ))}
+          
         </div>
       </div>
     </div>

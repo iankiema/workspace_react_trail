@@ -33,32 +33,33 @@ function PackageDetails() {
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row">
+    <div className="container col-lg-12">
+      <div className="row col-lg-12">
         <div className="col-lg-3">
           <Navbar />
         </div>
 
-        <div className="col-lg-9">
-          <h2>Package Details</h2>
-          <div>
-            <h3>{packageDetails.attributes?.name}</h3>
-            <p>Description: {packageDetails.attributes?.description}</p>
-            <p>Price: ${packageDetails.attributes?.price}</p>
-            <p>Image URL: {packageDetails.attributes?.image_url}</p>
-            {/* Add more details as needed */}
-
-            {/* View more packages link */}
-            <p>
-              <Link to="/packages">View more packages</Link>
-            </p>
+         
+         
+        <div className='col-lg-9 text-center'>
+        {/* <h2>Package Details</h2> */}
+                <h2>{packageDetails.attributes?.name}</h2>
+                <div className="row">
+                    <div className="col-md-8 mb-4 mx-auto ">
+                    <div className="card">
+                        <img src={packageDetails.attributes?.image_url} className="card-img-top" alt={packageDetails.attributes?.name} />
+                        <div className="card-body">
+                        <p className="card-text">{packageDetails.attributes?.description}</p>
+                        <p className="card-text">${packageDetails.attributes?.price}</p>
+                        <button onClick={() => handleBookNow(packageDetails)} className='btn btn-primary'>Book Now</button>
+                        <Link to="/packages" className="btn btn-secondary ml-2">
+                            Back to Packages
+                        </Link>
+                        </div>
+                    </div>
+                    </div>
+                </div>
           </div>
-
-          {/* Book Now button */}
-          <div>
-            <button onClick={() => handleBookNow(packageDetails)}>Book Now</button>
-          </div>
-        </div>
       </div>
     </div>
   );

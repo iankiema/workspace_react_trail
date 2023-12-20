@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Navbar from './sidebar';
+import { loginUser } from '../redux/loginSlice';
 
 function BookReservation() {
   const [location, setLocation] = useState('');
@@ -31,6 +32,8 @@ function BookReservation() {
     e.preventDefault();
 
     try {
+      const token = loginUser.data.token
+      console.log("token:",token)
       const response = await fetch('http://localhost:3000/api/v1/reservations', {
         method: 'POST',
         headers: {
