@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import Navbar from './sidebar';
 import { loginUser } from '../redux/loginSlice';
 
@@ -32,8 +31,8 @@ function BookReservation() {
     e.preventDefault();
 
     try {
-      const token = loginUser.data.token
-      console.log("token:",token)
+      const token = loginUser.data.token;
+      console.log("token:", token);
       const response = await fetch('http://localhost:3000/api/v1/reservations', {
         method: 'POST',
         headers: {
@@ -53,38 +52,45 @@ function BookReservation() {
 
   return (
     <div className="container-fluid">
-      <div className="row">
+      <div className="row align-items-center"> {/* Center both horizontally and vertically */}
         <div className="col-lg-3">
           <Navbar />
         </div>
 
-        <div className="col-lg-9">
-          <h2>Book Reservation</h2>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Location:
-              <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
-            </label>
-            <br />
-            <label>
-              Date:
-              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-            </label>
-            <br />
-            <label>
-              Select Package:
-              <select value={selectedPackage} onChange={(e) => setSelectedPackage(e.target.value)}>
-                <option value="">Select a package</option>
-                {packages.map((pack) => (
-                  <option key={pack.id} value={pack.attributes.slug}>
-                    {pack.attributes.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <br />
-            <button type="submit">Book Now</button>
-          </form>
+        <div className="col-lg-9 d-flex justify-content-center vh-100"> {/* Center horizontally */}
+          <div className="card shadow my-auto">
+            <div className="card-body">
+              <h2 className="card-title">Book Reservation</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="location" className="form-label">
+                    Location:
+                    <input type="text" className="form-control" id="location" value={location} onChange={(e) => setLocation(e.target.value)} />
+                  </label>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="date" className="form-label">
+                    Date:
+                    <input type="date" className="form-control" id="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                  </label>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="package" className="form-label">
+                    Select Package:
+                    <select className="form-select" id="package" value={selectedPackage} onChange={(e) => setSelectedPackage(e.target.value)}>
+                      <option value="">Select a package</option>
+                      {packages.map((pack) => (
+                        <option key={pack.id} value={pack.attributes.slug}>
+                          {pack.attributes.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <button type="submit" className="btn btn-primary">Book Now</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
