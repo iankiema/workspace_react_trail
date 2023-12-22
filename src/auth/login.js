@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { loginUser } from '../redux/loginSlice';
+import { setCurrentUser, selectCurrentUser } from '../redux/userSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -12,6 +13,7 @@ import './login.css'; // Import custom CSS
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentUser = useSelector(selectCurrentUser);
   const message = useSelector((state) => state.login_auths.loggedin);
 
   const [userInfo, setUserInfo] = useState({
@@ -29,12 +31,12 @@ function Login() {
   };
 
   useEffect(() => {
-    if (message === 'true') {
+    if (currentUser) {
       navigate('/home');
-    } else if (message === 'false') {
+    } else if (!currentUser) {
       navigate('/login');
     }
-  }, [message, navigate]);
+  }, [currentUser, navigate]);
 
   const handleChange = (e) => {
     e.preventDefault();

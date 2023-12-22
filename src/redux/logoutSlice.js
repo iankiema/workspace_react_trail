@@ -5,7 +5,7 @@ export const logoutUser = createAsyncThunk(
   'user/logoutUser',
   async (_, { dispatch }) => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/logout', {
+      const response = await fetch('http://localhost:3001/api/v1/logout', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,7 @@
 // loginSlice.js
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { setCurrentUser, clearCurrentUser } from './userSlice';
 
 const initialState = {
   value: {},
@@ -10,9 +12,9 @@ const initialState = {
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
-  async (userData) => {
+  async (userData, { dispatch }) => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/logged_in', {
+      const response = await fetch('http://localhost:3001/api/v1/logged_in', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,8 +35,12 @@ export const loginUser = createAsyncThunk(
         token: data.token,
       };
 
+      console.log('Extracted User Data:', extractedUserData);
+
+      dispatch(setCurrentUser(extractedUserData));
+
       // Store the data along with a timestamp
-      const expirationTime = new Date().getTime() + 1 * 60 * 60 * 1000; // 24 hours
+      const expirationTime = new Date().getTime() + 1 * 60 * 60 * 1000; // 1 hour
       const dataToStore = {
         extractedUserData,
         expirationTime,
@@ -53,32 +59,43 @@ const loginSlice = createSlice({
   name: 'login_auths',
   initialState,
   reducers: {
-
     checkLoginStatus: (state) => {
-      const key = 'loginData';
+      const key = 'userData'; // Corrected the key
       const storedData = localStorage.getItem(key);
-      if (localStorage.getItem(key) !== null) {
+
+      if (storedData !== null) {
         // Check if the data has expired
         const parsedData = JSON.parse(storedData);
-        if (new Date().getTime() > parsedData.expirationTime) {
+        const currentTime = new Date().getTime();
+
+        if (parsedData.expirationTime && currentTime > parsedData.expirationTime) {
           localStorage.removeItem(key); // Clear expired data
           return {
             ...state,
             loggedin: 'false',
           };
         }
-        // The key 'userData' exists in local storage
+
         return {
           ...state,
           loggedin: 'true',
         };
       }
+
       return {
         ...state,
         loggedin: 'false',
       };
     },
+    // logoutUser: (state) => {
+    //   localStorage.removeItem('userData');
+    //   state.loggedin = 'false';
+    //   state.status = 'idle';
+    //   state.error = 'no errors yet';
+    //   clearCurrentUser(state); // Dispatch clearCurrentUser to reset user data
+    // },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => ({
@@ -102,5 +119,5 @@ const loginSlice = createSlice({
   },
 });
 
-export const { checkLoginStatus } = loginSlice.actions;
+export const { checkLoginStatus, logoutUser } = loginSlice.actions;
 export default loginSlice.reducer;

@@ -7,16 +7,16 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import Home from './components/Home';
+import Home from './components/home';
 import SplashScreen from './components/splashscreen';
 import Signup from './auth/register';
 import Login from './auth/login';
 import Logout from './auth/logout';
-import PackageList from './components/PackageList';
-import PackageDetails from './components/PackageDetails';
-import ReservationsList from './components/ReservationList';
-import BookReservation from './components/BookReservation';
 import { checkLoginStatus } from './redux/loginSlice';
+import Packages from './components/packages';
+import PackageDetail from './components/packageDetail';
+import ReservationForm from './components/reservationform';
+import ReservationList from './components/reserationlist';
 
 
 
@@ -73,10 +73,14 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login message={loginStatus} />} />
               <Route path="/logout" element={Logout} />
-              <Route path="/packages" element={<PackageList/>} />
-              <Route path="/packages/:slug" element={<PackageDetails />} />
-              <Route path="/reservations" element={<ReservationsList/>} />
-              <Route path="/book-reservation" element={<BookReservation/>} />
+             
+              <Route path="/packages" element={<Packages />} />
+        
+              <Route path="/packages/:id" element={<PackageDetail />} />
+              <Route path="/packages/:slug" element={<PackageDetail />} />
+              <Route path="/packages/:slug/reserve" element={<ReservationForm />} />
+              <Route path="/packages/:slug/reserve" render={({ match }) => <ReservationForm packageSlug={match.params.slug} />} />
+              <Route path="/reservations" element={<ReservationList/>} />
             </Routes>
           </div>
         </Router>
